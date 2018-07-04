@@ -31,7 +31,7 @@ import zlib
 from PyInstaller.building.utils import get_code_object, strip_paths_in_code
 from PyInstaller.loader.pyimod02_archive import PYZ_TYPE_MODULE, PYZ_TYPE_PKG, \
     PYZ_TYPE_DATA
-from ..compat import BYTECODE_MAGIC, is_py2
+from ..compat import BYTECODE_MAGIC, is_py2, is_py37
 
 
 class ArchiveWriter(object):
@@ -112,8 +112,8 @@ class ArchiveWriter(object):
         assert ext in ('.pyc', '.pyo')
         self.toc.append((nm, (ispkg, self.lib.tell())))
         f = open(entry[1], 'rb')
-        if sys.version_info[:2] == (3, 7):
-            f.seek(12) # skip magic and timestamp
+        if is_py37:
+            f.seek(16) # skip magic and timestamp
         else:
             f.seek(8) # skip magic and timestamp
         self.lib.write(f.read())
