@@ -12,7 +12,7 @@
 """
 Utility functions related to analyzing/bundling dependencies.
 """
-
+import sys
 import ctypes
 import ctypes.util
 import dis
@@ -88,6 +88,8 @@ def create_py3_base_library(libzip_filename, graph):
                         with io.BytesIO() as fc:
                             # Prepare all data in byte stream file-like object.
                             fc.write(BYTECODE_MAGIC)
+                            if sys.version_info[:2] == (3, 7):
+                                _write_long(fc, 0)
                             _write_long(fc, timestamp)
                             _write_long(fc, size)
                             marshal.dump(mod.code, fc)
