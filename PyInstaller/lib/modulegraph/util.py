@@ -75,7 +75,10 @@ def imp_walk(name):
                     res = (fp, res.path, ('.py', 'rU', imp.PY_SOURCE))
                 elif res.path.endswith('.pyc') or res.path.endswith('.pyo'):
                     co  = res.get_code(namepart)
-                    fp = BytesIO(imp.get_magic() + b'\0\0\0\0' + marshal.dumps(co))
+                    if sys.version_info[:2] == (3, 7):
+                        fp = BytesIO(imp.get_magic() + b'\0\0\0\0\0\0\0\0\0\0\0\0' + marshal.dumps(co))
+                    else:
+                        fp = BytesIO(imp.get_magic() + b'\0\0\0\0' + marshal.dumps(co))
                     res = (fp, res.path, ('.pyc', 'rb', imp.PY_COMPILED))
 
                 else:
