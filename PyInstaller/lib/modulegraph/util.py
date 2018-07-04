@@ -14,7 +14,7 @@ except NameError:
     unicode = str
 
 from ._compat import StringIO, BytesIO, get_instructions
-
+from ...compat import is_py37
 
 def imp_find_module(name, path=None):
     """
@@ -75,7 +75,7 @@ def imp_walk(name):
                     res = (fp, res.path, ('.py', 'rU', imp.PY_SOURCE))
                 elif res.path.endswith('.pyc') or res.path.endswith('.pyo'):
                     co  = res.get_code(namepart)
-                    if sys.version_info[:2] == (3, 7):
+                    if is_py37:
                         fp = BytesIO(imp.get_magic() + b'\0\0\0\0\0\0\0\0\0\0\0\0' + marshal.dumps(co))
                     else:
                         fp = BytesIO(imp.get_magic() + b'\0\0\0\0' + marshal.dumps(co))
