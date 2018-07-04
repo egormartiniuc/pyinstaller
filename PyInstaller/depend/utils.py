@@ -12,7 +12,7 @@
 """
 Utility functions related to analyzing/bundling dependencies.
 """
-import sys
+
 import ctypes
 import ctypes.util
 import dis
@@ -25,7 +25,7 @@ import zipfile
 from ..lib.modulegraph import util, modulegraph
 
 from .. import compat
-from ..compat import (is_darwin, is_unix, is_py2, is_freebsd,
+from ..compat import (is_darwin, is_unix, is_py2, is_py37, is_freebsd,
                       BYTECODE_MAGIC, PY3_BASE_MODULES,
                       exec_python_rc)
 from .dylib import include_library
@@ -88,7 +88,7 @@ def create_py3_base_library(libzip_filename, graph):
                         with io.BytesIO() as fc:
                             # Prepare all data in byte stream file-like object.
                             fc.write(BYTECODE_MAGIC)
-                            if sys.version_info[:2] == (3, 7):
+                            if is_py37:
                                 _write_long(fc, 0)
                             _write_long(fc, timestamp)
                             _write_long(fc, size)
