@@ -35,7 +35,7 @@ from . import util
 from . import zipio
 from ._compat import get_instructions, BytesIO, StringIO, \
      pathname2url, _cOrd, _READ_MODE
-
+from ...compat import is_py37
 
 import codecs
 BOM = codecs.BOM_UTF8.decode('utf-8')
@@ -206,7 +206,7 @@ def os_listdir(path):
 
 def _code_to_file(co):
     """ Convert code object to a .pyc pseudo-file """
-    if sys.version_info[:2] == (3, 7):
+    if is_py37:
         return BytesIO(
             imp.get_magic() + b'\0\0\0\0\0\0\0\0\0\0\0\0' + marshal.dumps(co))
     return BytesIO(
